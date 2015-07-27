@@ -9,9 +9,23 @@ var lastPoint;
 var clientX, clientY, timeout;
 var density = 50;
 
-var colored = setInterval(temperet, 3600);
+var colored = setInterval(temperet, 4800);
+
+function timedtheme() {
+
+    colored = setInterval(temperet2, 2400);
+
+}
+
+function temperet2() {
+
+    colorTheme();
+    window.clearInterval(colored);
+
+}
 
 function temperet() {
+
     colorTheme();
     window.clearInterval(colored);
 
@@ -20,12 +34,26 @@ function temperet() {
     for (var i = 0; i < aparse.length; i++) {
         aparse[i].setAttribute('onclick', "timeColor()");
     }
+    var parent = document.getElementsByClassName("view-results pull-left splunk-view");
+    var child1 = document.getElementsByClassName("search-button btn-pill");
+    var child2 = document.getElementsByClassName("export-button btn-pill");
+    var child3 = document.getElementsByClassName("inspect-button btn-pill");
+    var child4 = document.getElementsByClassName("refresh-button btn-pill");
+
+    for (var i = parent.length - 1; i > -1; i--) {
+        if (parent[i].childNodes[0] != null) {
+            parent[i].removeChild(child1[i]);
+            parent[i].removeChild(child2[i]);
+            parent[i].removeChild(child3[i]);
+            parent[i].removeChild(child4[i]);
+        }
+    }
 
 }
 
 function timeColor() {
 
-    colored = setInterval(testingcolor, 180);
+    colored = setInterval(testingcolor, 120);
 
 }
 
@@ -33,7 +61,7 @@ function testingcolor() {
 
     tableTheme();
     window.clearInterval(colored);
-    
+
     var aparse = document.querySelectorAll('a');
 
     for (var i = 0; i < aparse.length; i++) {
@@ -41,6 +69,34 @@ function testingcolor() {
     }
 
 }
+
+/**public void MBrot()
+    {
+        var epsilon = 0.0001; // The step size across the X and Y axis
+        var x;
+        var y;
+        var maxIterations = 10; // increasing this will give you a more detailed fractal
+        var maxColors = 256; // Change as appropriate for your display.
+
+        Complex Z;
+        Complex C;
+        var iterations;
+        for(x=-2; x<=2; x+= epsilon)
+        {
+            for(y=-2; y<=2; y+= epsilon)
+            {
+                iterations = 0;
+                C = new Complex(x, y);
+                Z = new Complex(0,0);
+                while(Complex.Abs(Z) < 2 && iterations < maxIterations)
+                {
+                    Z = Z*Z + C;
+                    iterations++;
+                }
+                Screen.Plot(x,y, maxColors % iterations); // depending on the number of iterations, color a pixel.
+            }
+        }
+    }**/
 
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
