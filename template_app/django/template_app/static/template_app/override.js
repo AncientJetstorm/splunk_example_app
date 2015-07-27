@@ -1,6 +1,28 @@
 
 var infobutton = false;
 
+function testcreation() {
+
+    var sdd = document.createElement('select');
+    sdd.setAttribute('id', 'tempsdd');
+    document.getElementsByClassName('panel-head')[0].appendChild(sdd);
+    var option = document.createElement("option");
+    option.text = "";
+    option.value = "";
+    sdd.add(option);
+    for (var i = 0; i < 5; i++) {
+        var option = document.createElement("option");
+        option.text = "Value " + i;
+        option.value = "value" + i;
+        sdd.add(option);
+    }
+
+    //var parent = document.getElementsByClassName('panel-head')[0];
+    //var child = document.getElementById("tempsdd");
+    //parent.removeChild(child);
+
+}
+
 function showhideinfo() {
     if (!infobutton) {
         document.getElementById('information').style.position = "fixed";
@@ -14,7 +36,7 @@ function showhideinfo() {
         infobutton = true;
     } else {
         document.getElementById('drawstyle').style.marginLeft = "10px";
-        document.getElementById('canvascolor').style.marginLeft = "10px"
+        document.getElementById('canvascolor').style.marginLeft = "10px";
         document.getElementById('information').style.position = "static";
         document.getElementById('information').innerHTML = "?";
         infobutton = false;
@@ -54,6 +76,39 @@ function testPanel() {
 
 }
 
+function backswitch2(specific) {
+
+    var uniqueid = specific.value;
+    var path = document.querySelectorAll('path');
+
+    if (uniqueid == "back") {
+
+        for (var i = 0; i < path.length; i++) {
+            if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
+                path[i].setAttribute('stroke', 'transparent');
+                path[i].setAttribute('stroke-opacity', '0.0001');
+            }
+        }
+
+        testPanel();
+    } else if (uniqueid != "empty") {
+
+        for (var i = 0; i < path.length; i++) {
+            if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
+                if (path[i].getAttribute('d') == uniqueid) {
+                    path[i].setAttribute('stroke', 'black');
+                    path[i].setAttribute('stroke-opacity', '1');
+                    path[i].setAttribute('stroke-width', '5');
+                } else {
+                    path[i].setAttribute('stroke', 'transparent');
+                    path[i].setAttribute('stroke-opacity', '0.0001');
+                }
+            }
+        }
+    }
+
+}
+
 function backswitch() {
 
     var uniqueid = document.getElementById('uniqueidselect').value;
@@ -87,6 +142,127 @@ function backswitch() {
 
 }
 
+function updatepaths2() {
+
+    for (var z = 1; z < document.getElementById('uniqueidselect').length; z++) {
+        var panellist = document.getElementsByClassName('highcharts-series-group');
+        var selectdd = document.getElementById('uniqueidselect').options[z].text;;
+        var count = 0;
+        var specname = 0;
+        
+        for (var i = 0; i < panellist.length; i++) {
+            var parentname = panellist[i].parentNode;
+            while (parentname.getAttribute('class') != "panel-body") {
+                parentname = parentname.parentNode;
+            }
+            parentname = parentname.parentNode.childNodes[0].childNodes;
+            for (var j = 0; j < parentname.length; j++) {
+                if (parentname[j].nodeName == "H3") {
+                    if (parentname[j].innerHTML == selectdd) {
+                        specname = i;
+                    }
+                }
+            }
+        }
+
+        var panelhead = selectdd + ' sdd';
+        var doesexist = document.getElementById(panelhead);
+
+        if (doesexist == null || doesexist == undefined) {
+
+            var sdd = document.createElement('select');
+            sdd.setAttribute('id', selectdd + ' sdd');
+            sdd.setAttribute('onchange', 'backswitch2(this)');
+            var parentname = panellist[specname].parentNode;
+            while (parentname.getAttribute('class') != "panel-body") {
+                parentname = parentname.parentNode;
+            }
+            parentname = parentname.parentNode;
+            parentname.childNodes[0].appendChild(sdd);
+
+            var option = document.createElement('option');
+            option.text = '';
+            option.value = "blank";
+            document.getElementById(panelhead).add(option);
+
+            var sddcolor = document.createElement('input');
+            sddcolor.setAttribute('type', 'color');
+            sddcolor.setAttribute('onchange', "updatepath2(this, '" + panelhead + "')");
+            parentname.childNodes[0].appendChild(sddcolor);
+
+        }
+
+        var actualnames = [];
+        var ctype = "";
+        var templocal = panellist[specname].parentNode.childNodes;
+
+        for (var i = 0; i < templocal.length; i++) {
+            if (templocal[i].getAttribute('class') == "highcharts-legend") {
+                ctype = "legend"
+                i = templocal.length;
+            } else {
+                ctype = "pie";
+            }
+        }
+        
+        if (ctype == "pie") {
+            for (var i = 0; i < panellist[specname].parentNode.childNodes.length; i++) {
+                if (panellist[specname].parentNode.childNodes[i].getAttribute('class') == "highcharts-data-labels highcharts-tracker") {
+                    for (var j = 0; j < panellist[specname].parentNode.childNodes[i].childNodes.length; j++) {
+                        actualnames.push(panellist[specname].parentNode.childNodes[i].childNodes[j].childNodes[0].childNodes[0].innerHTML);
+                    }
+                }
+            }
+        } else {
+            for (var i = 0; i < panellist[specname].parentNode.childNodes.length; i++) {
+                if (panellist[specname].parentNode.childNodes[i].getAttribute('class') == "highcharts-legend") {
+                    for (var j = 0; j < panellist[specname].parentNode.childNodes[i].childNodes[0].childNodes.length; j++) {
+                        for (var k = 0; k < panellist[specname].parentNode.childNodes[i].childNodes[0].childNodes[j].childNodes[0].childNodes.length; k++) {
+                            if (panellist[specname].parentNode.childNodes[i].childNodes[0].childNodes[j].childNodes[0].childNodes[k].nodeName == "text"){
+                                actualnames.push(panellist[specname].parentNode.childNodes[i].childNodes[0].childNodes[j].childNodes[0].childNodes[k].childNodes[0].innerHTML);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        var tempcheck = [];
+        var isrepeat = false;
+
+        for (var k = 0; k < panellist[specname].childNodes.length; k++) {
+            for (var j = 0; j < panellist[specname].childNodes[k].childNodes.length; j++) {
+                if (panellist[specname].childNodes[k].childNodes[j].getAttribute('fill') != "none") {
+                    isrepeat = false;
+                    for (var i = 0; i < tempcheck.length; i++) {
+                        if (panellist[specname].childNodes[k].childNodes[j].getAttribute('d') == tempcheck[i]) {
+                            isrepeat = true;
+                        }
+                    }
+                    if (!isrepeat) {
+                        if (doesexist == null || doesexist == undefined) {
+                            var option = document.createElement('option');
+                            if (actualnames[count] == undefined) {
+                                option.text = "Index";
+                                option.setAttribute('textname', "Index");
+                            } else {
+                                option.text = actualnames[count];
+                                option.setAttribute('textname', actualnames[count]);
+                            }
+                            option.value = panellist[specname].childNodes[k].childNodes[j].getAttribute('d');
+                            document.getElementById(panelhead).add(option);
+                        }
+                        count++;
+                        tempcheck.push(panellist[specname].childNodes[k].childNodes[j].getAttribute('d'));
+                    }
+                }
+            }
+        }
+
+    }
+
+}
+
 function updatepaths() {
 
     var panellist = document.getElementsByClassName('highcharts-series-group');
@@ -107,6 +283,28 @@ function updatepaths() {
                 }
             }
         }
+    }
+
+    var panelhead = document.getElementById('uniqueidselect').value + ' sdd';
+    var doesexist = document.getElementById(panelhead);
+
+    if (doesexist == null || doesexist == undefined) {
+
+        var sdd = document.createElement('select');
+        sdd.setAttribute('id', document.getElementById('uniqueidselect').value + ' sdd');
+        sdd.setAttribute('onchange', 'backswitch2(this)');
+        var parentname = panellist[specname].parentNode;
+        while (parentname.getAttribute('class') != "panel-body") {
+            parentname = parentname.parentNode;
+        }
+        parentname = parentname.parentNode;
+        parentname.childNodes[0].appendChild(sdd);
+
+        var option = document.createElement('option');
+        option.text = '';
+        option.value = "blank";
+        document.getElementById(panelhead).add(option);
+
     }
 
     for (var i = selectdd.length - 1; i > -1; i--) {
@@ -176,6 +374,18 @@ function updatepaths() {
                     }
                     option.value = panellist[specname].childNodes[k].childNodes[j].getAttribute('d');
                     selectdd.add(option);
+                    if (doesexist == null || doesexist == undefined) {
+                        var option = document.createElement('option');
+                        if (actualnames[count] == undefined) {
+                            option.text = "Index";
+                            option.setAttribute('textname', "Index");
+                        } else {
+                            option.text = actualnames[count];
+                            option.setAttribute('textname', actualnames[count]);
+                        }
+                        option.value = panellist[specname].childNodes[k].childNodes[j].getAttribute('d');
+                        document.getElementById(panelhead).add(option);
+                    }
                     count++;
                     tempcheck.push(panellist[specname].childNodes[k].childNodes[j].getAttribute('d'));
                 }
@@ -538,6 +748,23 @@ function displayuniqueid() {
 
 }
 
+function updatepath2(colorspec, obj) {
+    
+    var mainColor = colorspec.value;
+    
+    var uniqueid = document.getElementById(obj).value;
+    var path = document.querySelectorAll('path');
+
+    for (var i = 0; i < path.length; i++) {
+        if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
+            if (path[i].getAttribute('d') == uniqueid) {
+                path[i].style.fill = mainColor;
+            }
+        }
+    }
+
+}
+
 function updatepath(ranorno) {
 
     if (ranorno) {
@@ -566,10 +793,15 @@ function blueprintTheme(c1, c2) {
     var tablehead = document.querySelectorAll('.table-chrome>thead>tr>th');
     var chartbg = document.querySelectorAll('.highcharts-background');
     var elements = document.querySelectorAll('.app-bar');
+    var inputs = document.querySelectorAll('select');
     var path = document.querySelectorAll('path');
     var rect = document.querySelectorAll('rect');
     var svg = document.querySelectorAll('text');
     var alinks = document.querySelectorAll('a');
+
+    for (var i = 0; i < inputs.length; i++) {
+        inputs[i].style.backgroundColor = c2;
+    }
 
     if (document.getElementById('changecontent').checked) {
         document.getElementById('content').style.backgroundColor = "transparent";
