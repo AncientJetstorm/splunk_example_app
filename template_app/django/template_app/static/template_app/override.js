@@ -785,6 +785,47 @@ function updatepath(ranorno) {
     }
 }
 
+function tableTheme() {
+
+    var c2;
+
+    if (document.getElementById('input2').value == "#BB3B23") {
+        c1 = "#BB3B23";
+        c2 = "#000000";
+    } else if (document.getElementById('input2').value == "#D3491E") {
+        c1 = "#D3491E";
+        c2 = "#EECB47";
+    } else if (document.getElementById('input2').value == "#456FFB") {
+        c1 = "#456FFB";
+        c2 = "#021330";
+    } else {
+        c1 = ColorLuminance(document.getElementById('input2').value, 0.3);
+        c2 = ColorLuminance(document.getElementById('input2').value, -0.3);
+    }
+
+    var selected = document.querySelectorAll('.splunk-paginator a.selected, .splunk-paginator a:hover');
+    var tableroweven = document.querySelectorAll('.table-striped>tbody>tr:nth-child(even)>td');
+    var tablerowodd = document.querySelectorAll('.table-striped>tbody>tr:nth-child(odd)>td');
+    var tablehead = document.querySelectorAll('.table-chrome>thead>tr>th');
+
+    for (var i = 0; i < tablerowodd.length; i++) {
+        tablerowodd[i].style.backgroundColor = c2;
+        tablerowodd[i].style.borderColor = "#000000";
+    }
+    for (var i = 0; i < tableroweven.length; i++) {
+        tableroweven[i].style.backgroundColor = c1;
+        tableroweven[i].style.borderColor = "#000000";
+    }
+    for (var i = 0; i < tablehead.length; i++) {
+        tablehead[i].style.backgroundColor = c1;
+        tablehead[i].style.borderColor = "#000000";
+    }
+    for (var i = 0; i < selected.length; i++) {
+        selected[i].style.backgroundColor = c1;
+    }
+
+}
+
 function blueprintTheme(c1, c2) {
 
     var selected = document.querySelectorAll('.splunk-paginator a.selected, .splunk-paginator a:hover');

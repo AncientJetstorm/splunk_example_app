@@ -14,6 +14,32 @@ var colored = setInterval(temperet, 3600);
 function temperet() {
     colorTheme();
     window.clearInterval(colored);
+
+    var aparse = document.querySelectorAll('a');
+
+    for (var i = 0; i < aparse.length; i++) {
+        aparse[i].setAttribute('onclick', "timeColor()");
+    }
+
+}
+
+function timeColor() {
+
+    colored = setInterval(testingcolor, 180);
+
+}
+
+function testingcolor() {
+
+    tableTheme();
+    window.clearInterval(colored);
+    
+    var aparse = document.querySelectorAll('a');
+
+    for (var i = 0; i < aparse.length; i++) {
+        aparse[i].setAttribute('onclick', "timeColor()");
+    }
+
 }
 
 function getRandomInt(min, max) {
