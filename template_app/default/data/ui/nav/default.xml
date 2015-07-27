@@ -1,0 +1,8 @@
+<nav color="#BB3B23">
+    <view name="default" default="true"/>
+    <a href="/dj/redirector/template_app/home">Home</a>
+    <collection label="Other">
+	    <view name="color" />
+	    <a href="/dj/template_app/other/color">Color</a>
+    </collection>
+</nav>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>App Documentation Home</title>
+    <link rel="shortcut icon" href="{{SPLUNKWEB_URL_PREFIX}}/static/img/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="{{SPLUNKWEB_URL_PREFIX}}/static/css/build/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="{{SPLUNKWEB_URL_PREFIX}}/static/css/build/pages/dashboard-simple-bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" media="all" href="{{SPLUNKWEB_URL_PREFIX}}/static/app/search/dashboard.css" />
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}{{app_name}}/custom.css" />
+    <link rel="stylesheet" type="text/css" href="{{STATIC_URL}}{{app_name}}/override.css" />
+    <script src="{{SPLUNKWEB_URL_PREFIX}}/config?autoload=1"></script>
+    <script src="{{SPLUNKWEB_URL_PREFIX}}/static/js/i18n.js"></script>
+    <script src="{{SPLUNKWEB_URL_PREFIX}}/i18ncatalog?autoload=1"></script>
+    <script src="{{SPLUNKWEB_URL_PREFIX}}/static/js/build/simplexml.min/config.js"></script>
+    <script src="{{STATIC_URL}}{{app_name}}/custom2.js"></script>
+    <script src="{{STATIC_URL}}{{app_name}}/override.js"></script>
+    <!--[if IE 7]><link rel="stylesheet" href="{{SPLUNKWEB_URL_PREFIX}}/static/css/sprites-ie7.css" /><![endif]-->
+</head>
+<body class="simplexml preload" id="bg">
+
+<!-- 
+BEGIN LAYOUT
+This section contains the layout for the dashboard. Splunk uses proprietary
+styles in <div> tags, similar to Bootstrap's grid system. 
+-->
+<a class="navSkip" href="#navSkip" tabindex="1">Screen reader users, click here to skip the navigation bar</a>
+<div class="header">
+    <div id="placeholder-splunk-bar">
+        <a href="{{SPLUNKWEB_URL_PREFIX}}/app/launcher/home" class="brand" title="splunk > listen to your data">splunk<strong>></strong></a>
+    </div>
+    <div id="placeholder-app-bar"></div>
+</div>
+<a id="navSkip"></a>
+    <div>
+        <div id="overlay">
+            <input type="submit" value="Open" onclick='overlayopen()' id="overlaybutton"><br>
+            <button id="information" onclick="showhideinfo()" style="margin-left: 5%; margin-bottom: 7px;">?</button>
+            <select id="drawstyle" style="visibility: hidden; margin-left: 10px;" onchange="overlaydrawstylechange(this)">
+                <option value="pencil">Pencil</option>
+                <option value="sketch">Sketch</option>
+                <option value="gradient">Gradient</option>
+                <option value="flowcircle">Flow Circle</option>
+                <option value="flowrectangle">Flow Rectangle</option>
+                <option value="flair">Flair</option>
+                <option value="pen">Pen</option>
+                <option value="fade">Fade</option>
+                <option value="other">Other</option>
+                <option value="sprayrect">Spray-Rectangle</option>
+                <option value="spraycirc">Spray-Circle</option>
+                <option value="eraser">Eraser</option>
+            </select>
+            <input type="color" id="canvascolor" style="visibility: hidden; margin-left: 10px;" onchange="overlaycolorchange()">
+            <input type="color" id="canvascolor2" style="visibility: hidden; position: fixed;">
+            <input type="submit" id="clearcanvas" value="Clear Canvas" onclick="clearcanvas(this)" style="visibility: hidden; margin-left: 10px; margin-bottom: 7px;">
+            <input type="submit" id="testbutton" value="testdraw" onclick="breakdb()" style="margin-left: 10px; margin-bottom: 7px;">
+            <input type="text" id="canvasline" value="1" style="margin-left: 10px;">
+            <input type="submit" value="Switch To Textbox" id="switchbutton" onclick="switchVisibility()" style="margin-left: 10px; margin-bottom: 7px;">
+            <select id="overlaysizechange" style="margin-left: 10px" onchange="overlaysize()">
+                <option value="half">Half Screen</option>
+                <option value="full">Full Screen</option>
+            </select>
+            <select id="opacitylevel" style="margin-left: 10px" onchange="opacitySwitch()">
+                <option value="1">Opacity: 1</option>
+                <option value="0.9">Opacity: 0.9</option>
+                <option value="0.8">Opacity: 0.8</option>
+                <option value="0.7">Opacity: 0.7</option>
+                <option value="0.6">Opacity: 0.6</option>
+                <option value="0.5">Opacity: 0.5</option>
+                <option value="0.4">Opacity: 0.4</option>
+                <option value="0.3">Opacity: 0.3</option>
+                <option value="0.2">Opacity: 0.2</option>
+            </select>
+            <canvas id="mycanvas" width="1500%" height="400%" style="background-color: white; border: solid; margin-left: 5%; visibility: visible" onmousedown="mouseisdown()" onmouseup="mouseisup()" onmousemove="movement(event, this)"></canvas>
+            <textarea id="overlaytextbox" style="background-color: white; border: solid; margin-left: 5%; width: 88.5%; visibility: hidden;">
+            </textarea>
+        </div>
+        <div class="main-area" id="content">
+            <table>
+                <tr>
+                    <td id="T1D1" width="25%">
+                        Color(hex): <input type="color" name="ncolor" id="ncolor" value="#BB3B23"><br>
+                        Light(0.0 to 1.0): <input type="text" name="light" id="light" value="0.2"><br>
+                        Dark(0.0 to -1.0): <input type="text" name="dark" id="dark" value="-0.4"><br>
+                        <input type="submit" value="Submit" onclick="colorLum()">
+                    </td>
+                    <td id="T1D2" width="25%">
+                        Color One: <input type="color" name="cone" id="cone" value="#BB3B23"><br>
+                        Color Two: <input type="color" name="ctwo" id="ctwo" value="#000000"><br>
+                        <input type="submit" value="Submit" onclick="colorBlend()"><br>
+                        <input type="submit" value="Random Color" onclick="randomColor()">
+                    </td>
+                    <td id="T1D3" width="25%"><center><span id="colorlabel1"></span></center></td>
+                    <td id="T1D4" width="25%"><center><span id="colorlabel2"></span></center></td>
+                </tr>
+            </table>
+            <table width="100%">
+                <tr>
+                    <td width="50%">
+                        <div id="element1" class="dashboard-element chart" style="width: 100%">
+                            <div class="panel-head">
+                                <h3>Top searched artist</h3>
+                            </div>
+                        </div>
+                        <center>
+                            <div class="input input-dropdown" id="input1" style="width: 50%">
+                            </div>
+                        </center>
+                    </td>
+                    <input type="submit" onclick="order()" value="Switch">
+                    <input type="submit" onclick="resetPie()" value="Reset">
+                    <td>
+                        <div id="accordion">
+                            <li id="accordionli" onclick="showhide('ali1')">
+                                <h4>
+                                    <center id="cen1">
+                                        &#62; Table 1 &#60;
+                                    </center>
+                                </h4>
+                                <div class="panel-element-row" id="ali1" style="display: none">
+                                    <div id="element2" class="dashboard-element table"></div>
+                                </div>
+                            </li>                            
+                            <li id="accordionli2" onclick="showhide('ali2')">
+                                <h4>
+                                    <center id="cen2">
+                                        &#62; Table 2 &#60;
+                                    </center>
+                                </h4>
+                                <div class="panel-element-row" id="ali2" style="display: none">
+                                    <div id="element4" class="dashboard-element table"></div>
+                                </div>
+                            </li>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <center>
+                            <select id="input2" onchange="colorTheme()">
+                                <option value="#AA3939" name="Gentle red">Gentle red</option>
+                                <option value="#2A4D6E" name="Soft blue">Soft blue</option>
+                                <option value="#789D34" name="Lush green">Lush green</option>
+                                <option value="#BB3B23" name="Original" selected>Original</option>
+                                <option value="#D3491E" name="Sunset">Sunset</option>
+                                <option value="#456FFB" name="Ocean">Ocean</option>
+                            </select>
+                            <input type="checkbox" id="changecontent" style="margin-bottom: 7px"> Change content area<br>
+                            <input type="submit" value="Update dropdown" onclick="testPanel()">
+                            <select id="uniqueidselect" onchange="updatepaths()">
+                            </select><br>
+                            <input type="submit" value="Change to random color" onclick="updatepath(true)">
+                            or
+                            <input type="color" id="specificcolor" onchange="updatepath(false)">
+                        </center>
+                    </td>
+                </tr>
+            </table>
+            <br><br>
+            <div class="panel-element-row">
+                <div id="element3" class="dashboard-element chart">
+                    <div class="panel-head">
+                        <h3>Top downloads on device</h3>
+                    </div>
+                </div>
+            </div>
+            <!--
+            <br>
+            <br>
+            <div class="panel-element-row">
+                <div id="element8" class="dashboard-element chart">
+                    <div class="panel-head">
+                        <h3>ChartA</h3>
+                    </div>
+                </div><br><br>
+                <div id="element9" class="dashboard-element chart">
+                    <div class="panel-head">
+                        <h3>ChartB</h3>
+                    </div>
+                </div><br><br>
+            </div>
+            <div class="panel-element-row">
+                <div id="element10" class="dashboard-element chart">
+                    <div class="panel-head">
+                        <h3>ChartC</h3>
+                    </div>
+                </div><br><br>
+                <div id="element11" class="dashboard-element chart">
+                    <div class="panel-head">
+                        <h3>ChartD</h3>
+                    </div>
+                </div><br><br>
+            </div>
+            <div class="panel-element-row">
+                <div id="element13" class="dashboard-element chart">
+                    <div class="panel-head">
+                        <h3>ChartE</h3>
+                    </div>
+                </div><br><br>
+                <div id="element14" class="dashboard-element chart">
+                    <div class="panel-head">
+                        <h3>ChartF</h3>
+                    </div>
+                </div><br><br>
+            </div>
+            -->
+            <p id="uniquesection">
+            </p>
+        </div>
+    </div>
+<div class="footer" id="footer" style="background-color: #f5f5f5"></div>
+
+    <script src="{{STATIC_URL}}{{app_name}}/canvas.js"></script>
+</body>
+</html>

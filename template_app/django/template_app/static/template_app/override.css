@@ -1,0 +1,80 @@
+svg text { 
+    fill: #BB3B23; 
+}
+.table-striped > tbody > tr:nth-child(odd) > td { 
+    background: #BB3B23;
+}
+.table .table, .table-striped>tbody>tr>td {
+    color: white;
+}
+.table-chrome > thead > tr > th {
+    background: #BB3B23;
+}
+.table-striped>tbody>tr:nth-child(even)>td {
+    background-color: #000000;
+}
+.table-chrome .sorts a {
+    text-decoration: none;
+    color: white;
+}
+
+.main-area {
+    height: 100%;
+}
+
+.footer {
+    height: 55px;
+}
+
+#accordion {
+    color: white;
+    background-color: white;
+    width: 100%;
+    list-style-type: none;
+}
+#accordionli, #accordionli2 {
+    background-color: black;
+    padding: 5px;
+    padding-bottom: 12px;
+}
+
+#accordionli:hover, #accordionli2:hover {
+    background-color: #464646;
+}
+
+#bg {
+    background-image: -webkit-linear-gradient(#BB3B23 10%, #000000);
+    background-image: -moz-linear-gradient(#BB3B23 10%, #000000);
+    background-image: -o-linear-gradient(#BB3B23 10%, #000000);
+    background-image: linear-gradient(#BB3B23 10%, #000000);
+}
+
+select {
+    background-color: #BB3B23;
+    color: white;
+}
+
+span#colorlabel1 {
+    background-color: white;
+    color: black;
+}
+span#colorlabel2 {
+    background-color: white;
+    color: black;
+}
+#overlay {
+    border: none;
+    border-radius: 5px 5px;
+    border-color: black;
+    border-width: 1px;
+    width: 0%;
+    height: 0%;
+    background-color: #BB3B23;
+    z-index: 100;
+    top: 98%;
+    position: fixed;
+}
+.time-freshness {
+    display: none;
+    color: white;
+}
