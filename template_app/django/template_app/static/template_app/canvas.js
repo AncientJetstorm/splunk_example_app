@@ -9,6 +9,13 @@ var lastPoint;
 var clientX, clientY, timeout;
 var density = 50;
 
+var colored = setInterval(temperet, 3600);
+
+function temperet() {
+    colorTheme();
+    window.clearInterval(colored);
+}
+
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
