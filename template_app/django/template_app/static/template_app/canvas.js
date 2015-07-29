@@ -8,6 +8,7 @@ var isDrawing, points = [ ];
 var lastPoint;
 var clientX, clientY, timeout;
 var density = 50;
+var rgbsegment = { r: 255, g: 0, b: 0 };
 
 var colored = setInterval(temperet, 4800);
 
@@ -19,8 +20,19 @@ function timedtheme() {
 
 function temperet2() {
 
-    colorTheme();
+    blueprintTheme(document.getElementById('colorlabel1').innerHTML, document.getElementById('colorlabel2').innerHTML);
     window.clearInterval(colored);
+
+    var child1 = document.getElementsByClassName("search-button btn-pill");
+    var child2 = document.getElementsByClassName("export-button btn-pill");
+    var child3 = document.getElementsByClassName("inspect-button btn-pill");
+    var child4 = document.getElementsByClassName("refresh-button btn-pill");
+    var parent = child1[0].parentNode;
+
+    parent.removeChild(child1[0]);
+    parent.removeChild(child2[0]);
+    parent.removeChild(child3[0]);
+    parent.removeChild(child4[0]);
 
 }
 
@@ -70,34 +82,6 @@ function testingcolor() {
 
 }
 
-/**public void MBrot()
-    {
-        var epsilon = 0.0001; // The step size across the X and Y axis
-        var x;
-        var y;
-        var maxIterations = 10; // increasing this will give you a more detailed fractal
-        var maxColors = 256; // Change as appropriate for your display.
-
-        Complex Z;
-        Complex C;
-        var iterations;
-        for(x=-2; x<=2; x+= epsilon)
-        {
-            for(y=-2; y<=2; y+= epsilon)
-            {
-                iterations = 0;
-                C = new Complex(x, y);
-                Z = new Complex(0,0);
-                while(Complex.Abs(Z) < 2 && iterations < maxIterations)
-                {
-                    Z = Z*Z + C;
-                    iterations++;
-                }
-                Screen.Plot(x,y, maxColors % iterations); // depending on the number of iterations, color a pixel.
-            }
-        }
-    }**/
-
 function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
@@ -136,6 +120,10 @@ el.onmousedown = function(e) {
         timeout = setTimeout(draw, 50);
       }, 50);
   } else {
+    ctx.lineWidth = document.getElementById('canvasline').value;
+    ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
+    ctx.lineTo(getMousePos(null, e).x - 1, getMousePos(null, e).y - 1);
+    ctx.stroke();
     points = [ ];
     points.push({ x: getMousePos(null, e).x, y: getMousePos(null, e).y });
     lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y };
@@ -148,6 +136,7 @@ el.onmousemove = function(e) {
   ctx.lineWidth = document.getElementById('canvasline').value;
   var line = document.getElementById('canvasline').value;
   ctx.strokeStyle = document.getElementById('canvascolor').value;
+  ctx.fillStyle = document.getElementById('canvascolor2').value;
   origincolor = hexToRgb(document.getElementById('canvascolor').value);
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
@@ -177,6 +166,27 @@ el.onmousemove = function(e) {
       }
     }
 
+  } else if (document.getElementById('drawstyle').value == 'flowsketch') {
+
+    ctx.beginPath();
+    ctx.globalAlpha = 1;
+    ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
+    ctx.lineTo(lastPoint.x, lastPoint.y);
+    ctx.stroke();
+    ctx.closePath();
+
+    for (var i = 0; i < 8; i++) {
+        ctx.beginPath();
+        ctx.globalAlpha = 1 - (i * 0.1);
+        ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y + ((1 * i) * document.getElementById('canvasline').value));
+        ctx.lineTo(lastPoint.x, lastPoint.y + ((1 * i) * document.getElementById('canvasline').value));
+        ctx.stroke();
+        ctx.closePath();
+    }
+
+    lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y };
+
+    
   } else if (document.getElementById('drawstyle').value == 'pencil') {
 
     ctx.beginPath();
@@ -185,6 +195,15 @@ el.onmousemove = function(e) {
       ctx.lineTo(points[i].x, points[i].y);
     }
     ctx.stroke();
+
+  } else if (document.getElementById('drawstyle').value == 'deltapencil') {
+
+    ctx.beginPath();
+    ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
+    ctx.lineTo(lastPoint.x, lastPoint.y);
+    ctx.stroke();
+    ctx.closePath();
+    lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y }
 
   } else if (document.getElementById('drawstyle').value == 'fade') {
 
@@ -225,20 +244,46 @@ el.onmousemove = function(e) {
       }
     }
 
+  } else if (document.getElementById('drawstyle').value == 'highlight') {
+
+    ctx.globalAlpha = 0.2;
+    ctx.beginPath();
+    ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
+    ctx.lineTo(lastPoint.x, lastPoint.y);
+    ctx.stroke();
+    ctx.closePath();
+    lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y }
+
   } else if (document.getElementById('drawstyle').value == 'flair') {
 
-    ctx.beginPath();
-    ctx.moveTo(points[points.length - 2].x, points[points.length - 2].y);
-    ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
-    ctx.stroke();
-    
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(' + origincolor.r + ', ' + origincolor.g + ', ' + origincolor.b + ', 0.3)';
-    ctx.moveTo(points[points.length - 2].x, points[points.length - 2].y);
-    ctx.lineTo(points[points.length - 1].x - 5, points[points.length - 1].y - 10);
-    ctx.moveTo(points[points.length - 2].x, points[points.length - 2].y);
-    ctx.lineTo(points[points.length - 1].x + 5, points[points.length - 1].y + 10);
-    ctx.stroke();
+    ctx.drawstyle = "black";
+    ctx.fillStyle = document.getElementById('canvascolor');
+
+    /**for (var i = 0; i < points.length; i++) {
+        ctx.beginPath();
+        ctx.moveTo(points[i].x, points[i].y);
+        ctx.lineTo(points[i].x - 1, points[i].y - 1);
+        ctx.stroke();
+        ctx.closePath();
+    }**/
+
+    var seccolor = hexToRgb(document.getElementById('canvascolor2').value);
+    ctx.lineWidth = 1;
+    var radius = Math.floor(Math.random() * document.getElementById('canvasline').value);
+
+    //for (var i = 0; i < points.length; i++) {
+
+        ctx.strokeStyle = "rgba(" + origincolor.r + ", " + origincolor.g + ", " + origincolor.b + ", " + (Math.random() * 250) + ")";
+        ctx.fillStyle = "rgba(" + seccolor.r + ", " + seccolor.g + ", " + seccolor.b + ", " + (Math.random() * 250) + ")";
+        ctx.globalAlpha = Math.random();
+
+        ctx.beginPath();
+        //ctx.arc(points[i].x, points[i].y, Math.floor(Math.random() * 10), false, Math.PI * 2, false);
+        //ctx.arc(points[i].x, points[i].y, radius, false, Math.PI * 2, false);
+        ctx.arc(getMousePos(null, e).x, getMousePos(null, e).y, radius, false, Math.PI * 2, false);
+        ctx.fill();
+        ctx.stroke();
+    //}
 
   } else if (document.getElementById('drawstyle').value == 'pen') {
 
@@ -313,31 +358,46 @@ el.onmousemove = function(e) {
     ctx.stroke();
     ctx.closePath();
 
-  } else if (document.getElementById('drawstyle').value == 'other') {
+  } else if (document.getElementById('drawstyle').value == 'rainbow') {
 
-    var updown = Math.random();
-    var leftright = Math.random();
-    if (updown > 0.5) {
-        if (leftright > 0.5) {
-            points.push({ x: (getMousePos(null, e).x - (Math.random() * (10 * line))), y: (getMousePos(null, e).y - (Math.random() * (10 * line))) });
-        } else {
-            points.push({ x: (getMousePos(null, e).x + (Math.random() * (10 * line))), y: (getMousePos(null, e).y - (Math.random() * (10 * line))) });
+    if (rgbsegment.r == 255 && rgbsegment.g < 255 && rgbsegment.b == 0) {
+        rgbsegment.g += 5;
+    } else if (rgbsegment.r > 0 && rgbsegment.g == 255 && rgbsegment.b == 0) {
+        rgbsegment.r -= 5;
+    } else if (rgbsegment.r == 0 && rgbsegment.g == 255 && rgbsegment.b < 255) {
+        rgbsegment.b += 5;
+    } else if (rgbsegment.r == 0 && rgbsegment.g > 0 && rgbsegment.b == 255) {
+        rgbsegment.g -= 5;
+    } else if (rgbsegment.r < 255 && rgbsegment.g == 0 && rgbsegment.b == 255) {
+        rgbsegment.r += 5;
+    } else if (rgbsegment.r == 255 && rgbsegment.g == 0 && rgbsegment.b > 0) {
+        rgbsegment.b -= 5;
+    }
+
+    /**if (bw) {
+        rgbsegment.r -= 5;
+        rgbsegment.g -= 5;
+        rgbsegment.b -= 5;
+        if (rgbsegment.r == 0) {
+            bw = false;
         }
     } else {
-        if (leftright > 0.5) {
-            points.push({ x: (getMousePos(null, e).x - (Math.random() * (10 * line))), y: (getMousePos(null, e).y + (Math.random() * (10 * line))) });
-        } else {
-            points.push({ x: (getMousePos(null, e).x + (Math.random() * (10 * line))), y: (getMousePos(null, e).y + (Math.random() * (10 * line))) });
+        rgbsegment.r += 5;
+        rgbsegment.g += 5;
+        rgbsegment.b += 5;
+        if (rgbsegment.r == 255) {
+            bw = true;
         }
-    }
-    points.push({ x: getMousePos(null, e).x, y: getMousePos(null, e).y });
+    }**/
+
+    ctx.strokeStyle = "rgb(" + rgbsegment.r + ", " + rgbsegment.g + ", " + rgbsegment.b + ")";
 
     ctx.beginPath();
-    ctx.moveTo(points[0].x, points[0].y);
-    for (var i = 1; i < points.length; i++) {
-        ctx.lineTo(points[i].x, points[i].y);
-    }
+    ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
+    ctx.lineTo(lastPoint.x, lastPoint.y);
     ctx.stroke();
+
+    lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y };
 
   } else if (document.getElementById('drawstyle').value == 'sprayrect' || document.getElementById('drawstyle').value == 'spraycirc') {
 

@@ -787,21 +787,8 @@ function updatepath(ranorno) {
 
 function tableTheme() {
 
-    var c2;
-
-    if (document.getElementById('input2').value == "#BB3B23") {
-        c1 = "#BB3B23";
-        c2 = "#000000";
-    } else if (document.getElementById('input2').value == "#D3491E") {
-        c1 = "#D3491E";
-        c2 = "#EECB47";
-    } else if (document.getElementById('input2').value == "#456FFB") {
-        c1 = "#456FFB";
-        c2 = "#021330";
-    } else {
-        c1 = ColorLuminance(document.getElementById('input2').value, 0.3);
-        c2 = ColorLuminance(document.getElementById('input2').value, -0.3);
-    }
+    var c1 = document.getElementById('colorlabel1').innerHTML;
+    var c2 = document.getElementById('colorlabel2').innerHTML;
 
     var selected = document.querySelectorAll('.splunk-paginator a.selected, .splunk-paginator a:hover');
     var tableroweven = document.querySelectorAll('.table-striped>tbody>tr:nth-child(even)>td');
