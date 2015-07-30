@@ -83,7 +83,7 @@ styles in <div> tags, similar to Bootstrap's grid system.
             <table width="100%">
                 <tr>
                     <td id="T1D1" width="25%">
-                        Color(hex): <input type="color" name="ncolor" id="ncolor" value="#BB3B23" style="width: 100px"><br>
+                        Color: <input type="color" name="ncolor" id="ncolor" value="#BB3B23" style="width: 100px"><br>
                         Light: 
                         <select id="light" style="width: 100px">
                             <option value="0.0">0.0</option>
@@ -139,8 +139,6 @@ styles in <div> tags, similar to Bootstrap's grid system.
                             </div>
                         </center>
                     </td>
-                    <input type="submit" onclick="order()" value="Switch">
-                    <input type="submit" onclick="resetPie()" value="Reset">
                     <td>
                         <div id="accordion">
                             <li id="accordionli" onclick="showhide('ali1')">
@@ -176,15 +174,11 @@ styles in <div> tags, similar to Bootstrap's grid system.
                                 <option value="#BB3B23" name="Original" selected>Original</option>
                                 <option value="#D3491E" name="Sunset">Sunset</option>
                                 <option value="#456FFB" name="Ocean">Ocean</option>
+                                <option value="other" name="other">Other</option>
                             </select>
                             <input type="checkbox" id="changecontent" style="margin-bottom: 7px"> Change content area<br>
-                            <input type="submit" value="Update dropdown" onclick="testPanel()">
-                            <select id="uniqueidselect" onchange="updatepaths()" style="width: 150px">
+                            <select id="uniqueidselect" onchange="updatepaths()" style="width: 150px; visibility: hidden; position: fixed;">
                             </select><br>
-                            <input type="submit" value="Change to random color" onclick="updatepath(true)">
-                            or
-                            <input type="color" id="specificcolor" onchange="updatepath(false)" style="width: 100px">
-                            <input type="submit" onclick="updatepaths2()">
                         </center>
                     </td>
                 </tr>
@@ -197,48 +191,6 @@ styles in <div> tags, similar to Bootstrap's grid system.
                     </div>
                 </div>
             </div>
-            <!--
-            <br>
-            <br>
-            <div class="panel-element-row">
-                <div id="element8" class="dashboard-element chart">
-                    <div class="panel-head">
-                        <h3>ChartA</h3>
-                    </div>
-                </div><br><br>
-                <div id="element9" class="dashboard-element chart">
-                    <div class="panel-head">
-                        <h3>ChartB</h3>
-                    </div>
-                </div><br><br>
-            </div>
-            <div class="panel-element-row">
-                <div id="element10" class="dashboard-element chart">
-                    <div class="panel-head">
-                        <h3>ChartC</h3>
-                    </div>
-                </div><br><br>
-                <div id="element11" class="dashboard-element chart">
-                    <div class="panel-head">
-                        <h3>ChartD</h3>
-                    </div>
-                </div><br><br>
-            </div>
-            <div class="panel-element-row">
-                <div id="element13" class="dashboard-element chart">
-                    <div class="panel-head">
-                        <h3>ChartE</h3>
-                    </div>
-                </div><br><br>
-                <div id="element14" class="dashboard-element chart">
-                    <div class="panel-head">
-                        <h3>ChartF</h3>
-                    </div>
-                </div><br><br>
-            </div>
-            -->
-            <p id="uniquesection">
-            </p>
         </div>
     </div>
 <div class="footer" id="footer" style="background-color: #f5f5f5"></div>

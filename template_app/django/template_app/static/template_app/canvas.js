@@ -127,10 +127,6 @@ el.onmousedown = function(e) {
         timeout = setTimeout(draw, 50);
       }, 50);
   } else {
-    //ctx.lineWidth = document.getElementById('canvasline').value;
-    //ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
-    //ctx.lineTo(getMousePos(null, e).x - 1, getMousePos(null, e).y - 1);
-    //ctx.stroke();
     points = [ ];
     points.push({ x: getMousePos(null, e).x, y: getMousePos(null, e).y });
     lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y };
@@ -535,22 +531,6 @@ el.onmousemove = function(e) {
         rgbsegment.b = 0;
     }
 
-    /**if (bw) {
-        rgbsegment.r -= 5;
-        rgbsegment.g -= 5;
-        rgbsegment.b -= 5;
-        if (rgbsegment.r == 0) {
-            bw = false;
-        }
-    } else {
-        rgbsegment.r += 5;
-        rgbsegment.g += 5;
-        rgbsegment.b += 5;
-        if (rgbsegment.r == 255) {
-            bw = true;
-        }
-    }**/
-
     ctx.strokeStyle = "rgb(" + rgbsegment.r + ", " + rgbsegment.g + ", " + rgbsegment.b + ")";
 
     ctx.beginPath();
@@ -619,47 +599,6 @@ function getMousePos(canvas, evt) {
     };
 }
 
-function breakdb() {
-
-    for (var i = 0; i < 50; i++) {
-        drawball();
-    }
-
-}
-
-function drawball() {
-
-    var canvas = document.getElementById('mycanvas');
-
-    ctx.lineWidth = 1;
-    var rx = (Math.random() * canvas.width);
-    var ry = (Math.random() * canvas.height);
-    var tempC = generateColor();
-
-    //var grd = ctx.createRadialGradient(80, 55, 5, 90, 60, 100);
-    var grd = ctx.createRadialGradient(rx, ry, 5, rx + 10, ry + 5, 100);
-    //grd.addColorStop(0, ColorLuminance(document.getElementById('canvascolor').value, 1.5));
-    //grd.addColorStop(1, ColorLuminance(document.getElementById('canvascolor').value, -1.5));
-    grd.addColorStop(0, ColorLuminance(tempC, 1.5));
-    grd.addColorStop(1, ColorLuminance(tempC, -1.5));
-    //grd.addColorStop(0, 'rgb(250, 120, 120)');
-    //grd.addColorStop(0.2, 'rgb(230, 70, 70)');
-    //grd.addColorStop(0.8, 'rgb(100, 0, 0)');
-    //grd.addColorStop(1, 'rgb(70, 0, 0)');
-    ctx.strokeStyle = grd;
-    ctx.beginPath();
-    //ctx.arc(100,75,50,0,2*Math.PI);
-    ctx.shadowBlur = 20;
-    ctx.shadowColor="black";
-    ctx.shadowOffsetX = 5;
-    ctx.shadowOffsetY = 5;
-    ctx.arc(rx + 20, ry + 20, 50, 0, 2*Math.PI);
-    ctx.stroke();
-    ctx.fillStyle = grd;
-    ctx.fill();
-
-}
-
 function hexToRgb(hex) {
 
     var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -698,44 +637,6 @@ function clearcanvas(obj) {
         context.clearRect(0, 0, canvas.width, canvas.height);
     } else {
         document.getElementById('overlaytextbox').value = "";
-    }
-
-}
-
-function testdraw(event, obj) {
-
-    var canvas = document.getElementById('mycanvas');
-    var context = canvas.getContext('2d');
-
-    var viewportOffset = obj.getBoundingClientRect();
-
-    var top = viewportOffset.top;
-    var left = viewportOffset.left;
-
-    var x = event.clientX - left;
-    var y = event.clientY - top;
-
-    context.strokeStyle = document.getElementById('canvascolor').value;
-    context.fillStyle = document.getElementById('canvascolor2').value;
-    context.beginPath();
-
-    for (var i = 0; i < setvals.length / 2; i++) {
-        if (i == 0) {
-
-            context.moveTo(setvals[i], setvals[i + 1]);
-
-        } else if (i == 1) {
-
-            context.lineTo(setvals[i + 1], setvals[i + 2], 1, 0, 0);
-            context.stroke();
-
-        } else {
-
-            context.lineTo(setvals[i * 2], setvals[(i * 2) + 1]);
-            context.fill();
-            context.stroke();
-
-        }
     }
 
 }

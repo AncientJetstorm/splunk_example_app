@@ -17,10 +17,6 @@ function testcreation() {
         sdd.add(option);
     }
 
-    //var parent = document.getElementsByClassName('panel-head')[0];
-    //var child = document.getElementById("tempsdd");
-    //parent.removeChild(child);
-
 }
 
 function showhideinfo() {
@@ -92,39 +88,6 @@ function backswitch2(specific) {
 
         testPanel();
     } else if (uniqueid != "empty") {
-
-        for (var i = 0; i < path.length; i++) {
-            if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
-                if (path[i].getAttribute('d') == uniqueid) {
-                    path[i].setAttribute('stroke', 'black');
-                    path[i].setAttribute('stroke-opacity', '1');
-                    path[i].setAttribute('stroke-width', '5');
-                } else {
-                    path[i].setAttribute('stroke', 'transparent');
-                    path[i].setAttribute('stroke-opacity', '0.0001');
-                }
-            }
-        }
-    }
-
-}
-
-function backswitch() {
-
-    var uniqueid = document.getElementById('uniqueidselect').value;
-    var path = document.querySelectorAll('path');
-
-    if (document.getElementById('uniqueidselect').value == "back") {
-
-        for (var i = 0; i < path.length; i++) {
-            if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
-                path[i].setAttribute('stroke', 'transparent');
-                path[i].setAttribute('stroke-opacity', '0.0001');
-            }
-        }
-
-        testPanel();
-    } else if (document.getElementById('uniqueidselect').value != "empty") {
 
         for (var i = 0; i < path.length; i++) {
             if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
@@ -262,140 +225,6 @@ function updatepaths2() {
         }
 
     }
-
-}
-
-function updatepaths() {
-
-    var panellist = document.getElementsByClassName('highcharts-series-group');
-    var selectdd = document.getElementById('uniqueidselect');
-    var count = 0;
-    var specname = 0;
-    
-    for (var i = 0; i < panellist.length; i++) {
-        var parentname = panellist[i].parentNode;
-        while (parentname.getAttribute('class') != "panel-body") {
-            parentname = parentname.parentNode;
-        }
-        parentname = parentname.parentNode.childNodes[0].childNodes;
-        for (var j = 0; j < parentname.length; j++) {
-            if (parentname[j].nodeName == "H3") {
-                if (parentname[j].innerHTML == document.getElementById('uniqueidselect').value) {
-                    specname = i;
-                }
-            }
-        }
-    }
-
-    var panelhead = document.getElementById('uniqueidselect').value + ' sdd';
-    var doesexist = document.getElementById(panelhead);
-
-    if (doesexist == null || doesexist == undefined) {
-
-        var sdd = document.createElement('select');
-        sdd.setAttribute('id', document.getElementById('uniqueidselect').value + ' sdd');
-        sdd.setAttribute('onchange', 'backswitch2(this)');
-        var parentname = panellist[specname].parentNode;
-        while (parentname.getAttribute('class') != "panel-body") {
-            parentname = parentname.parentNode;
-        }
-        parentname = parentname.parentNode;
-        parentname.childNodes[0].appendChild(sdd);
-
-        var option = document.createElement('option');
-        option.text = '';
-        option.value = "blank";
-        document.getElementById(panelhead).add(option);
-
-    }
-
-    for (var i = selectdd.length - 1; i > -1; i--) {
-        selectdd.remove(i);
-    }
-
-    var option = document.createElement('option');
-    option.text = '';
-    option.value = "blank";
-    selectdd.add(option);
-    var option = document.createElement('option');
-    option.text = "Back";
-    option.value = "back";
-    selectdd.add(option);
-
-    var actualnames = [];
-    var ctype = "";
-    var templocal = panellist[specname].parentNode.childNodes;
-
-    for (var i = 0; i < templocal.length; i++) {
-        if (templocal[i].getAttribute('class') == "highcharts-legend") {
-            ctype = "legend"
-            i = templocal.length;
-        } else {
-            ctype = "pie";
-        }
-    }
-    
-    if (ctype == "pie") {
-        for (var i = 0; i < panellist[specname].parentNode.childNodes.length; i++) {
-            if (panellist[specname].parentNode.childNodes[i].getAttribute('class') == "highcharts-data-labels highcharts-tracker") {
-                for (var j = 0; j < panellist[specname].parentNode.childNodes[i].childNodes.length; j++) {
-                    actualnames.push(panellist[specname].parentNode.childNodes[i].childNodes[j].childNodes[0].childNodes[0].innerHTML);
-                }
-            }
-        }
-    } else {
-        for (var i = 0; i < panellist[specname].parentNode.childNodes.length; i++) {
-            if (panellist[specname].parentNode.childNodes[i].getAttribute('class') == "highcharts-legend") {
-                for (var j = 0; j < panellist[specname].parentNode.childNodes[i].childNodes[0].childNodes.length; j++) {
-                    actualnames.push(panellist[specname].parentNode.childNodes[i].childNodes[0].childNodes[j].childNodes[0].childNodes[0].childNodes[0].innerHTML);
-                }
-            }
-        }
-    }
-    
-    var tempcheck = [];
-    var isrepeat = false;
-
-    for (var k = 0; k < panellist[specname].childNodes.length; k++) {
-        for (var j = 0; j < panellist[specname].childNodes[k].childNodes.length; j++) {
-            if (panellist[specname].childNodes[k].childNodes[j].getAttribute('fill') != "none") {
-                isrepeat = false;
-                for (var i = 0; i < tempcheck.length; i++) {
-                    if (panellist[specname].childNodes[k].childNodes[j].getAttribute('d') == tempcheck[i]) {
-                        isrepeat = true;
-                    }
-                }
-                if (!isrepeat) {
-                    var option = document.createElement('option');
-                    if (actualnames[count] == undefined) {
-                        option.text = "Index";
-                        option.setAttribute('textname', "Index");
-                    } else {
-                        option.text = actualnames[count];
-                        option.setAttribute('textname', actualnames[count]);
-                    }
-                    option.value = panellist[specname].childNodes[k].childNodes[j].getAttribute('d');
-                    selectdd.add(option);
-                    if (doesexist == null || doesexist == undefined) {
-                        var option = document.createElement('option');
-                        if (actualnames[count] == undefined) {
-                            option.text = "Index";
-                            option.setAttribute('textname', "Index");
-                        } else {
-                            option.text = actualnames[count];
-                            option.setAttribute('textname', actualnames[count]);
-                        }
-                        option.value = panellist[specname].childNodes[k].childNodes[j].getAttribute('d');
-                        document.getElementById(panelhead).add(option);
-                    }
-                    count++;
-                    tempcheck.push(panellist[specname].childNodes[k].childNodes[j].getAttribute('d'));
-                }
-            }
-        }
-    }
-
-    document.getElementById('uniqueidselect').setAttribute('onchange', "backswitch()");
 
 }
 
@@ -542,7 +371,7 @@ function switchVisibility() {
         }
 
         document.getElementById('clearcanvas').value = "Clear Canvas";
-        
+
         document.getElementById('canvasline').style.visibility = "visible";
         document.getElementById('canvasline').style.position = "static";
 
@@ -586,7 +415,7 @@ function ColorLuminance(hex, lum) {
 
     if (hex.length < 6) {
 
-        hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+        hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
 
     }
 
@@ -596,9 +425,9 @@ function ColorLuminance(hex, lum) {
 
     for (i = 0; i < 3; i++) {
 
-        c = parseInt(hex.substr(i*2,2), 16);
+        c = parseInt(hex.substr(i * 2,2), 16);
         c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
-        rgb += ("00"+c).substr(c.length);
+        rgb += ("00" + c).substr(c.length);
 
     }
 
@@ -672,67 +501,6 @@ function getCssValuePrefix() {
     return rtrnVal;
 }
 
-function findposleft(obj) {
-    var curleft = 0;
-    if (obj.offsetParent) {
-        do {
-            curleft += obj.offsetLeft;
-        } while (obj = obj.offsetParent);
-            return curleft;
-    }
-}
-
-function findpostop(obj) {
-    var curtop = 0;
-    if (obj.offsetParent) {
-        do {
-            curtop += obj.offsetTop;
-        } while (obj = obj.offsetParent);
-            return curtop;
-    }
-}
-
-function displayuniqueid() {
-
-    var x = document.getElementById("uniqueidselect");
-
-    for (var i = x.length - 1; i > -1; i--) {
-        x.remove(i);
-    }
-
-    var idset = "";
-
-    var path = document.querySelectorAll('path');
-    var charttype = "";
-    var dstyle = "";
-
-    for (var i = 0; i < path.length; i++) {
-        if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
-
-            dstyle = "";
-            charttype = "";
-            pathname = path[i].getAttribute('d');
-            for (var j = 0; j < pathname.length; j++) {
-                if (pathname.charAt(j) == "M" || pathname.charAt(j) == "L" || pathname.charAt(j) == "H" || pathname.charAt(j) == "V" || pathname.charAt(j) == "C" || pathname.charAt(j) == "S" || pathname.charAt(j) == "Q" || pathname.charAt(j) == "T" || pathname.charAt(j) == "A" || pathname.charAt(j) == "Z") {
-                    dstyle = dstyle + path[i].getAttribute('d').charAt(j);
-                }
-            }
-            if (dstyle == "MALAZ") {
-                charttype = "Pie";
-            }
-
-            idset = idset + " ID: (" + path[i].getAttribute('d') + ") - " + charttype + " <br /> <br />";
-            var option = document.createElement("option");
-            option.text = path[i].getAttribute('d');
-            option.value = path[i].getAttribute('d');
-            x.add(option);
-        }
-    }
-
-    document.getElementById('uniquesection').innerHTML = idset;
-
-}
-
 function updatepath2(colorspec, obj) {
     
     var mainColor = colorspec.value;
@@ -748,26 +516,6 @@ function updatepath2(colorspec, obj) {
         }
     }
 
-}
-
-function updatepath(ranorno) {
-
-    if (ranorno) {
-        var mainColor = generateColor();
-    } else {
-        var mainColor = document.getElementById('specificcolor').value;
-    }
-    
-    var uniqueid = document.getElementById('uniqueidselect').value;
-    var path = document.querySelectorAll('path');
-
-    for (var i = 0; i < path.length; i++) {
-        if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
-            if (path[i].getAttribute('d') == uniqueid) {
-                path[i].style.fill = mainColor;
-            }
-        }
-    }
 }
 
 function tableTheme() {
@@ -877,13 +625,6 @@ function blueprintTheme(c1, c2) {
     document.getElementById('ctwo').value = c2;
     document.getElementById('ncolor').value = c1;
 
-
-    //for (var i = 0; i < alinks.length; i++) {
-        //if (alinks[i].getAttribute('href') == "#") {
-            //alinks[i].setAttribute('onclick', "colorTheme()");
-        //}
-    //}
-
 }
 
 function hexToRgb(hex) {
@@ -909,6 +650,8 @@ function colorTheme() {
         blueprintTheme("#D3491E", "#EECB47");
     } else if (document.getElementById('input2').value == "#456FFB") {
         blueprintTheme("#456FFB", "#021330");
+    } else if (document.getElementById('input2').value == "other") {
+        console.log('Trolololololol');
     } else {
         blueprintTheme(ColorLuminance(document.getElementById('input2').value, 0.3), ColorLuminance(document.getElementById('input2').value, -0.3));
     }
@@ -919,11 +662,15 @@ function colorLum() {
 
     blueprintTheme(ColorLuminance(document.getElementById('ncolor').value, document.getElementById('light').value), ColorLuminance(document.getElementById('ncolor').value, document.getElementById('dark').value));
 
+    document.getElementById('input2').selectedIndex = "6";
+
 }
 
 function colorBlend() {
 
     blueprintTheme(document.getElementById('cone').value, document.getElementById('ctwo').value);
+
+    document.getElementById('input2').selectedIndex = "6";
 
 }
 
@@ -932,6 +679,8 @@ function randomColor() {
     var mainColor = generateColor();
 
     blueprintTheme(ColorLuminance(mainColor, Math.random()), ColorLuminance(mainColor, -Math.random()));
+
+    document.getElementById('input2').selectedIndex = "6";
 
 }
 
@@ -951,7 +700,7 @@ function showhide(show) {
 
 }
 
-var origin = [];
+/**var origin = [];
 var setvals = [];
 
 function resetPie() {
@@ -1049,88 +798,4 @@ function order() {
 
     }
 
-}
-
-function drawsome(event, obj) {
-
-    var viewportOffset = obj.getBoundingClientRect();
-
-    var top = viewportOffset.top;
-    var left = viewportOffset.left;
-
-    var x = event.clientX - left;
-    var y = event.clientY - top;
-    var b_canvas = document.getElementById("mycanvas");
-    var b_context = b_canvas.getContext("2d");
-    b_context.fillRect(x, y, 150, 100);
-}
-
-var localx = null;
-var localy = null;
-var endx = null;
-var endy = null;
-
-function line(event, obj) {
-
-    var viewportOffset = obj.getBoundingClientRect();
-
-    var top = viewportOffset.top;
-    var left = viewportOffset.left;
-
-    if (localy == null) {
-
-        localx = event.clientX - left;
-        localy = event.clientY - top;
-
-    } else if (endy == null) {
-
-        endx = event.clientX - left;
-        endy = event.clientY - top;
-
-        var canvas = document.getElementById('mycanvas');
-        var context = canvas.getContext('2d');
-
-        context.beginPath();
-        context.moveTo(localx, localy);
-        context.lineTo(endx, endy);
-
-        context.lineWidth = 5;
-        context.strokeStyle = 'blue';
-        context.stroke();
-
-        localy = localx = endy = endx = null;
-
-    }
-
-}
-
-function overlay() {
-    el = document.getElementById("overlay");
-    el.style.visibility = "visible";
-
-    var uniqueid = document.getElementById('uniqueidselect').value;
-
-    var paths = document.querySelectorAll('path');
-
-    for (var i = 0; i < paths.length; i++) {
-        if (paths[i].getAttribute('fill') != null && paths[i].getAttribute('fill') != "none") {
-            if (paths[i].getAttribute('d') == uniqueid) {
-                //paths[i].setAttribute("d", "M" + (Math.random() * 100) + "," + (Math.random() * 100) + " L" + ((Math.random() * 100) + 100) + "," + ((Math.random() * 100) + 50) + " L" + ((Math.random() * 100) + 100) + "," + ((Math.random() * 100) + 100) + "  Z");
-
-                var locals = paths[i].getAttribute('d');
-                var lastpos = 0;
-                for (var j = 0; j < 3; j++) {
-                    lastpos = locals.indexOf(" ", lastpos) + 1;
-                }
-                
-                locals = locals.substr(2, lastpos - 3);
-                var relpos = locals.split(" ");
-                var negtemp = -65 + Math.floor(relpos[1]);
-                el.style.left = findposleft(paths[i]) + Math.floor(relpos[0]) + "px";
-                el.style.top = findpostop(paths[i]) + negtemp + "px";
-            }
-        }
-    }
-
-
-}
+}**/
