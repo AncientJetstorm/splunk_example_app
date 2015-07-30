@@ -9,6 +9,10 @@ var lastPoint;
 var clientX, clientY, timeout;
 var density = 50;
 var rgbsegment = { r: 255, g: 0, b: 0 };
+var rgbflip = true;
+var rvote = false;
+var gvote = false;
+var bvote = false;
 
 var colored = setInterval(temperet, 4800);
 
@@ -60,6 +64,9 @@ function temperet() {
             parent[i].removeChild(child4[i]);
         }
     }
+
+    testPanel();
+    updatepaths2();
 
 }
 
@@ -120,10 +127,10 @@ el.onmousedown = function(e) {
         timeout = setTimeout(draw, 50);
       }, 50);
   } else {
-    ctx.lineWidth = document.getElementById('canvasline').value;
-    ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
-    ctx.lineTo(getMousePos(null, e).x - 1, getMousePos(null, e).y - 1);
-    ctx.stroke();
+    //ctx.lineWidth = document.getElementById('canvasline').value;
+    //ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
+    //ctx.lineTo(getMousePos(null, e).x - 1, getMousePos(null, e).y - 1);
+    //ctx.stroke();
     points = [ ];
     points.push({ x: getMousePos(null, e).x, y: getMousePos(null, e).y });
     lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y };
@@ -138,6 +145,7 @@ el.onmousemove = function(e) {
   ctx.strokeStyle = document.getElementById('canvascolor').value;
   ctx.fillStyle = document.getElementById('canvascolor2').value;
   origincolor = hexToRgb(document.getElementById('canvascolor').value);
+  origincolor2 = hexToRgb(document.getElementById('canvascolor2').value);
   ctx.shadowOffsetX = 0;
   ctx.shadowOffsetY = 0;
 
@@ -186,7 +194,156 @@ el.onmousemove = function(e) {
 
     lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y };
 
+  } else if (document.getElementById('drawstyle').value == 'rainbowsketch') {
+
+    if (rgbsegment.r == 255 && rgbsegment.g < 255 && rgbsegment.b == 0) {
+        rgbsegment.g += 5;
+    } else if (rgbsegment.r > 0 && rgbsegment.g == 255 && rgbsegment.b == 0) {
+        rgbsegment.r -= 5;
+    } else if (rgbsegment.r == 0 && rgbsegment.g == 255 && rgbsegment.b < 255) {
+        rgbsegment.b += 5;
+    } else if (rgbsegment.r == 0 && rgbsegment.g > 0 && rgbsegment.b == 255) {
+        rgbsegment.g -= 5;
+    } else if (rgbsegment.r < 255 && rgbsegment.g == 0 && rgbsegment.b == 255) {
+        rgbsegment.r += 5;
+    } else if (rgbsegment.r == 255 && rgbsegment.g == 0 && rgbsegment.b > 0) {
+        rgbsegment.b -= 5;
+    } else {
+        rgbsegment.r = 255;
+        rgbsegment.g = 0;
+        rgbsegment.b = 0;
+    }
+
+    ctx.strokeStyle = "rgb(" + rgbsegment.r + ", " + rgbsegment.g + ", " + rgbsegment.b + ")";
+
+    ctx.beginPath();
+    ctx.moveTo(points[points.length - 2].x, points[points.length - 2].y);
+    ctx.lineTo(points[points.length - 1].x, points[points.length - 1].y);
+    ctx.stroke();
     
+    for (var i = 0, len = points.length; i < len; i++) {
+      dx = points[i].x - points[points.length-1].x;
+      dy = points[i].y - points[points.length-1].y;
+      d = dx * dx + dy * dy;
+
+      if (d < 1000) {
+        ctx.beginPath();
+        ctx.strokeStyle = 'rgba(' + rgbsegment.r + ', ' + rgbsegment.g + ', ' + rgbsegment.b + ', 0.3)';
+        ctx.moveTo( points[points.length-1].x + (dx * 0.2), points[points.length-1].y + (dy * 0.2));
+        ctx.lineTo( points[i].x - (dx * 0.2), points[i].y - (dy * 0.2));
+        ctx.stroke();
+      }
+    }
+    
+  } else if (document.getElementById('drawstyle').value == 'gradient') {
+
+    if (origincolor.r == origincolor2.r) {
+        rgbsegment.r = origincolor.r;
+        rvote = true;
+    } else if (origincolor.r < origincolor2.r) {
+        if (rgbflip && rgbsegment.r < origincolor2.r) {
+            rgbsegment.r += 1;
+            if (rgbsegment.r == origincolor2.r) {
+                rvote = true;
+            }
+        } else if (!rgbflip && rgbsegment.r > origincolor.r) {
+            rgbsegment.r -= 1;
+            if (rgbsegment.r == origincolor.r) {
+                rvote = true;
+            }
+        }
+    } else if (origincolor.r > origincolor2.r) {
+        if (rgbflip && rgbsegment.r > origincolor2.r) {
+            rgbsegment.r -= 1;
+            if (rgbsegment.r == origincolor2.r) {
+                rvote = true;
+            }
+        } else if (!rgbflip && rgbsegment.r < origincolor.r) {
+            rgbsegment.r += 1;
+            if (rgbsegment.r == origincolor.r) {
+                rvote = true;
+            }
+        }
+    }
+
+    if (origincolor.g == origincolor2.g) {
+        rgbsegment.g = origincolor.g;
+        gvote = true;
+    } else if (origincolor.g < origincolor2.g) {
+        if (rgbflip && rgbsegment.g < origincolor2.g) {
+            rgbsegment.g += 1;
+            if (rgbsegment.g == origincolor2.g) {
+                gvote = true;
+            }
+        } else if (!rgbflip && rgbsegment.g > origincolor.g) {
+            rgbsegment.g -= 1;
+            if (rgbsegment.g == origincolor.g) {
+                gvote = true;
+            }
+        }
+    } else if (origincolor.g > origincolor2.g) {
+        if (rgbflip && rgbsegment.g > origincolor2.g) {
+            rgbsegment.g -= 1;
+            if (rgbsegment.g == origincolor2.g) {
+                gvote = true;
+            }
+        } else if (!rgbflip && rgbsegment.g < origincolor.g) {
+            rgbsegment.g += 1;
+            if (rgbsegment.g == origincolor.g) {
+                gvote = true;
+            }
+        }
+    }
+
+    if (origincolor.b == origincolor2.b) {
+        rgbsegment.b = origincolor.b;
+        bvote = true;
+    } else if (origincolor.b < origincolor2.b) {
+        if (rgbflip && rgbsegment.b < origincolor2.b) {
+            rgbsegment.b += 1;
+            if (rgbsegment.b == origincolor2.b) {
+                bvote = true;
+            }
+        } else if (!rgbflip && rgbsegment.b > origincolor.b) {
+            rgbsegment.b -= 1;
+            if (rgbsegment.b == origincolor.b) {
+                bvote = true;
+            }
+        }
+    } else if (origincolor.b > origincolor2.b) {
+        if (rgbflip && rgbsegment.b > origincolor2.b) {
+            rgbsegment.b -= 1;
+            if (rgbsegment.b == origincolor2.b) {
+                bvote = true;
+            }
+        } else if (!rgbflip && rgbsegment.b < origincolor.b) {
+            rgbsegment.b += 1;
+            if (rgbsegment.b == origincolor.b) {
+                bvote = true;
+            }
+        }
+    }
+
+    if (rvote && gvote && bvote) {
+        if (rgbflip) {
+            rgbflip = false;
+        } else {
+            rgbflip = true;
+        }
+        rvote = false;
+        gvote = false;
+        bvote = false;
+    }
+
+    ctx.strokeStyle = "rgb(" + rgbsegment.r + ", " + rgbsegment.g + ", " + rgbsegment.b + ")";
+
+    ctx.beginPath();
+    ctx.moveTo(getMousePos(null, e).x, getMousePos(null, e).y);
+    ctx.lineTo(lastPoint.x, lastPoint.y);
+    ctx.stroke();
+
+    lastPoint = { x: getMousePos(null, e).x, y: getMousePos(null, e).y };
+
   } else if (document.getElementById('drawstyle').value == 'pencil') {
 
     ctx.beginPath();
@@ -372,6 +529,10 @@ el.onmousemove = function(e) {
         rgbsegment.r += 5;
     } else if (rgbsegment.r == 255 && rgbsegment.g == 0 && rgbsegment.b > 0) {
         rgbsegment.b -= 5;
+    } else {
+        rgbsegment.r = 255;
+        rgbsegment.g = 0;
+        rgbsegment.b = 0;
     }
 
     /**if (bw) {
@@ -512,6 +673,19 @@ function hexToRgb(hex) {
         g: parseInt(result[2], 16),
         b: parseInt(result[3], 16)
     } : null;
+}
+
+function overlaycolorchange() {
+
+    if (document.getElementById('mycanvas').style.visibility == "hidden") {
+        document.getElementById('overlaytextbox').style.color = document.getElementById('canvascolor').value;
+    } else {
+        var disc = hexToRgb(document.getElementById('canvascolor').value);
+        rgbsegment.r = disc.r;
+        rgbsegment.g = disc.g;
+        rgbsegment.b = disc.b;
+    }
+
 }
 
 function clearcanvas(obj) {

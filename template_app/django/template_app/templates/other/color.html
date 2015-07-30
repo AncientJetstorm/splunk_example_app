@@ -37,11 +37,12 @@ styles in <div> tags, similar to Bootstrap's grid system.
         <div id="overlay">
             <input type="submit" value="Open" onclick='overlayopen()' id="overlaybutton"><br>
             <button id="information" onclick="showhideinfo()" style="margin-left: 5%; margin-bottom: 7px;">?</button>
-            <select id="drawstyle" style="visibility: hidden; margin-left: 10px;" onchange="overlaydrawstylechange(this)">
+            <select id="drawstyle" style="visibility: hidden; margin-left: 10px; width: 150px;" onchange="overlaydrawstylechange(this)">
                 <option value="pencil">Pencil</option>
                 <option value="deltapencil">Delta: Pencil</option>
                 <option value="sketch">Sketch</option>
                 <option value="highlight">Highlight</option>
+                <option value="rainbowsketch">Rainbow Sketch</option>
                 <option value="gradient">Gradient</option>
                 <option value="flowsketch">Flow Sketch</option>
                 <option value="flowcircle">Flow Circle</option>
@@ -54,17 +55,16 @@ styles in <div> tags, similar to Bootstrap's grid system.
                 <option value="spraycirc">Spray-Circle</option>
                 <option value="eraser">Eraser</option>
             </select>
-            <input type="color" id="canvascolor" style="visibility: hidden; margin-left: 10px;" onchange="overlaycolorchange()">
-            <input type="color" id="canvascolor2" style="visibility: hidden; position: fixed;">
+            <input type="color" id="canvascolor" style="visibility: hidden; margin-left: 10px; width: 100px;" onchange="overlaycolorchange()">
+            <input type="color" id="canvascolor2" style="visibility: hidden; position: fixed; margin-left: 10px; width: 100px">
             <input type="submit" id="clearcanvas" value="Clear Canvas" onclick="clearcanvas(this)" style="visibility: hidden; margin-left: 10px; margin-bottom: 7px;">
-            <input type="submit" id="testbutton" value="testdraw" onclick="breakdb()" style="margin-left: 10px; margin-bottom: 7px;">
-            <input type="text" id="canvasline" value="1" style="margin-left: 10px;">
+            <input type="text" id="canvasline" value="1" style="margin-left: 10px; width: 100px;">
             <input type="submit" value="Switch To Textbox" id="switchbutton" onclick="switchVisibility()" style="margin-left: 10px; margin-bottom: 7px;">
-            <select id="overlaysizechange" style="margin-left: 10px" onchange="overlaysize()">
+            <select id="overlaysizechange" style="margin-left: 10px; width: 100px;" onchange="overlaysize()">
                 <option value="half">Half Screen</option>
                 <option value="full">Full Screen</option>
             </select>
-            <select id="opacitylevel" style="margin-left: 10px" onchange="opacitySwitch()">
+            <select id="opacitylevel" style="margin-left: 10px; width: 100px;" onchange="opacitySwitch()">
                 <option value="1">Opacity: 1</option>
                 <option value="0.9">Opacity: 0.9</option>
                 <option value="0.8">Opacity: 0.8</option>
@@ -80,17 +80,45 @@ styles in <div> tags, similar to Bootstrap's grid system.
             </textarea>
         </div>
         <div class="main-area" id="content">
-            <table>
+            <table width="100%">
                 <tr>
                     <td id="T1D1" width="25%">
-                        Color(hex): <input type="color" name="ncolor" id="ncolor" value="#BB3B23"><br>
-                        Light(0.0 to 1.0): <input type="text" name="light" id="light" value="0.2"><br>
-                        Dark(0.0 to -1.0): <input type="text" name="dark" id="dark" value="-0.4"><br>
+                        Color(hex): <input type="color" name="ncolor" id="ncolor" value="#BB3B23" style="width: 100px"><br>
+                        Light: 
+                        <select id="light" style="width: 100px">
+                            <option value="0.0">0.0</option>
+                            <option value="0.1">0.1</option>
+                            <option value="0.2">0.2</option>
+                            <option value="0.3">0.3</option>
+                            <option value="0.4">0.4</option>
+                            <option value="0.5">0.5</option>
+                            <option value="0.6">0.6</option>
+                            <option value="0.7">0.7</option>
+                            <option value="0.8">0.8</option>
+                            <option value="0.9">0.9</option>
+                            <option value="1">1</option>
+                        </select>
+                        <br>
+                        Dark:
+                        <select id="dark" style="width: 100px">
+                            <option value="0.0">0.0</option>
+                            <option value="-0.1">-0.1</option>
+                            <option value="-0.2">-0.2</option>
+                            <option value="-0.3">-0.3</option>
+                            <option value="-0.4">-0.4</option>
+                            <option value="-0.5">-0.5</option>
+                            <option value="-0.6">-0.6</option>
+                            <option value="-0.7">-0.7</option>
+                            <option value="-0.8">-0.8</option>
+                            <option value="-0.9">-0.9</option>
+                            <option value="-1">-1</option>
+                        </select>
+                        <br>
                         <input type="submit" value="Submit" onclick="colorLum()">
                     </td>
                     <td id="T1D2" width="25%">
-                        Color One: <input type="color" name="cone" id="cone" value="#BB3B23"><br>
-                        Color Two: <input type="color" name="ctwo" id="ctwo" value="#000000"><br>
+                        Color One: <input type="color" name="cone" id="cone" value="#BB3B23" style="width: 100px"><br>
+                        Color Two: <input type="color" name="ctwo" id="ctwo" value="#000000" style="width: 100px"><br>
                         <input type="submit" value="Submit" onclick="colorBlend()"><br>
                         <input type="submit" value="Random Color" onclick="randomColor()">
                     </td>
@@ -141,7 +169,7 @@ styles in <div> tags, similar to Bootstrap's grid system.
                 <tr>
                     <td colspan="2">
                         <center>
-                            <select id="input2" onchange="colorTheme()">
+                            <select id="input2" onchange="colorTheme()" style="width: 100px">
                                 <option value="#AA3939" name="Gentle red">Gentle red</option>
                                 <option value="#2A4D6E" name="Soft blue">Soft blue</option>
                                 <option value="#789D34" name="Lush green">Lush green</option>
@@ -151,11 +179,11 @@ styles in <div> tags, similar to Bootstrap's grid system.
                             </select>
                             <input type="checkbox" id="changecontent" style="margin-bottom: 7px"> Change content area<br>
                             <input type="submit" value="Update dropdown" onclick="testPanel()">
-                            <select id="uniqueidselect" onchange="updatepaths()">
+                            <select id="uniqueidselect" onchange="updatepaths()" style="width: 150px">
                             </select><br>
                             <input type="submit" value="Change to random color" onclick="updatepath(true)">
                             or
-                            <input type="color" id="specificcolor" onchange="updatepath(false)">
+                            <input type="color" id="specificcolor" onchange="updatepath(false)" style="width: 100px">
                             <input type="submit" onclick="updatepaths2()">
                         </center>
                     </td>

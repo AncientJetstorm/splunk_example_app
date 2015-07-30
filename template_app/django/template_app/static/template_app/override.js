@@ -172,6 +172,7 @@ function updatepaths2() {
 
             var sdd = document.createElement('select');
             sdd.setAttribute('id', selectdd + ' sdd');
+            sdd.setAttribute('style', "width: 150px");
             sdd.setAttribute('onchange', 'backswitch2(this)');
             var parentname = panellist[specname].parentNode;
             while (parentname.getAttribute('class') != "panel-body") {
@@ -187,6 +188,7 @@ function updatepaths2() {
 
             var sddcolor = document.createElement('input');
             sddcolor.setAttribute('type', 'color');
+            sddcolor.setAttribute('style', "width: 100px");
             sddcolor.setAttribute('onchange', "updatepath2(this, '" + panelhead + "')");
             parentname.childNodes[0].appendChild(sddcolor);
 
@@ -442,9 +444,6 @@ function overlayopen() {
         document.getElementById('clearcanvas').style.visibility = "visible";
         document.getElementById('clearcanvas').style.position = "static";
 
-        document.getElementById('testbutton').style.visibility = "visible";
-        document.getElementById('testbutton').style.position = "static";
-
         document.getElementById('canvasline').style.visibility = "visible";
         document.getElementById('canvasline').style.position = "static";
     }
@@ -503,9 +502,6 @@ function switchVisibility() {
 
         document.getElementById('clearcanvas').value = "Clear Text";
 
-        document.getElementById('testbutton').style.visibility = "hidden";
-        document.getElementById('testbutton').style.position = "fixed";
-
         document.getElementById('canvasline').style.visibility = "hidden";
         document.getElementById('canvasline').style.position = "fixed";
 
@@ -546,10 +542,7 @@ function switchVisibility() {
         }
 
         document.getElementById('clearcanvas').value = "Clear Canvas";
-
-        document.getElementById('testbutton').style.visibility = "visible";
-        document.getElementById('testbutton').style.position = "static";
-
+        
         document.getElementById('canvasline').style.visibility = "visible";
         document.getElementById('canvasline').style.position = "static";
 
@@ -583,14 +576,6 @@ function overlaydrawstylechange(ddel) {
         document.getElementById('canvascolor2').style.visibility = "hidden";
         document.getElementById('canvascolor2').style.position = "fixed";
 
-    }
-
-}
-
-function overlaycolorchange() {
-
-    if (document.getElementById('mycanvas').style.visibility == "hidden") {
-        document.getElementById('overlaytextbox').style.color = document.getElementById('canvascolor').value;        
     }
 
 }
