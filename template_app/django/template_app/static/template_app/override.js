@@ -155,6 +155,18 @@ function updatepaths2() {
             sddcolor.setAttribute('onchange', "updatepath2(this, '" + panelhead + "')");
             parentname.childNodes[0].appendChild(sddcolor);
 
+            var sddcb = document.createElement('input');
+            sddcb.setAttribute('type', 'checkbox');
+            sddcb.setAttribute('class', 'cblocks');
+            sddcb.setAttribute('name', selectdd);
+            sddcb.setAttribute('style', 'margin: 7px; margin-bottom: 10px;');
+            parentname.childNodes[0].appendChild(sddcb);
+
+            var sddp = document.createElement('p');
+            sddp.setAttribute('style', 'display: inline-block');
+            sddp.innerHTML = "Lock colors";
+            parentname.childNodes[0].appendChild(sddp);
+
         }
 
         var actualnames = [];
@@ -546,6 +558,44 @@ function tableTheme() {
 
 }
 
+function tablecolor() {
+
+    var tcolor = document.getElementById('tablecolor').value;
+    var affected = document.querySelectorAll(document.getElementById('tableselect').value);
+
+    for (var i = 0; i < affected.length; i++) {
+        affected[i].style.backgroundColor = tcolor;
+    }
+
+}
+
+function doespathmatch(path, headname) {
+
+    var parentname = path.parentNode;
+    var mxreturn = false;
+
+    if (parentname.getAttribute('id') == "AddData" || parentname.getAttribute('id') == "Page-1") {
+        return false;
+    }
+
+    while (parentname.getAttribute('class') != "panel-body") {
+        parentname = parentname.parentNode;
+    }
+
+    parentname = parentname.parentNode.childNodes[0].childNodes;
+
+    for (var i = 0; i < parentname.length; i++) {
+        if (parentname[i].nodeName == "H3") {
+            if (parentname[i].innerHTML == headname) {
+                mxreturn = true;
+            }
+        }
+    }
+
+    return mxreturn;
+
+}
+
 function blueprintTheme(c1, c2) {
 
     var selected = document.querySelectorAll('.splunk-paginator a.selected, .splunk-paginator a:hover');
@@ -553,6 +603,7 @@ function blueprintTheme(c1, c2) {
     var tablerowodd = document.querySelectorAll('.table-striped>tbody>tr:nth-child(odd)>td');
     var tablehead = document.querySelectorAll('.table-chrome>thead>tr>th');
     var chartbg = document.querySelectorAll('.highcharts-background');
+    var cblocks = document.getElementsByClassName('cblocks');
     var elements = document.querySelectorAll('.app-bar');
     var inputs = document.querySelectorAll('select');
     var path = document.querySelectorAll('path');
@@ -570,38 +621,90 @@ function blueprintTheme(c1, c2) {
         document.getElementById('content').style.backgroundColor = "white";
     }
     elements[0].style.backgroundColor = c1;
-    for (var i = 0; i < tablerowodd.length; i++) {
-        tablerowodd[i].style.backgroundColor = c2;
-        tablerowodd[i].style.borderColor = "#000000";
+    if (!document.getElementById('tablelock').checked) {
+        for (var i = 0; i < tablerowodd.length; i++) {
+            tablerowodd[i].style.backgroundColor = c2;
+            tablerowodd[i].style.borderColor = "#000000";
+        }
+        for (var i = 0; i < tableroweven.length; i++) {
+            tableroweven[i].style.backgroundColor = c1;
+            tableroweven[i].style.borderColor = "#000000";
+        }
+        for (var i = 0; i < tablehead.length; i++) {
+            tablehead[i].style.backgroundColor = c1;
+            tablehead[i].style.borderColor = "#000000";
+        }
     }
-    for (var i = 0; i < tableroweven.length; i++) {
-        tableroweven[i].style.backgroundColor = c1;
-        tableroweven[i].style.borderColor = "#000000";
-    }
-    for (var i = 0; i < tablehead.length; i++) {
-        tablehead[i].style.backgroundColor = c1;
-        tablehead[i].style.borderColor = "#000000";
-    } 
     for (var i = 0; i < rect.length; i++) {
-        rect[i].style.fill = c1;
+        var paffect = true;
+        for (var j = 0; j < cblocks.length; j++) {
+            if (cblocks[j].checked) {
+                if (doespathmatch(rect[i], cblocks[j].getAttribute('name'))) {
+                    paffect = false;
+                }
+            }
+        }
+        if (paffect) {
+            rect[i].style.fill = c1;
+        }
     }
     for (var i = 0; i < chartbg.length; i++) {
-        chartbg[i].style.fill = c2;
+        var paffect = true;
+        for (var j = 0; j < cblocks.length; j++) {
+            if (cblocks[j].checked) {
+                if (doespathmatch(chartbg[i], cblocks[j].getAttribute('name'))) {
+                    paffect = false;
+                }
+            }
+        }
+        if (paffect) {
+            chartbg[i].style.fill = c2;
+        }
     }
     for (var i = 0; i < path.length; i++) {
         if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
-            var posneg = Math.random();
-            if (posneg > 0.5) {
-                path[i].style.fill = ColorLuminance(c1, Math.random());
-            } else {
-                path[i].style.fill = ColorLuminance(c1, -Math.random());
+            var paffect = true;
+            for (var j = 0; j < cblocks.length; j++) {
+                if (cblocks[j].checked) {
+                    if (doespathmatch(path[i], cblocks[j].getAttribute('name'))) {
+                        paffect = false;
+                    }
+                }
+            }
+            if (paffect) {
+                var posneg = Math.random();
+                if (posneg > 0.5) {
+                    path[i].style.fill = ColorLuminance(c1, Math.random());
+                } else {
+                    path[i].style.fill = ColorLuminance(c1, -Math.random());
+                }
             }
         } else if (path[i].getAttribute('fill') == "none") {
-            path[i].style.stroke = ColorLuminance(c1, Math.random());
+            var paffect = true;
+            for (var j = 0; j < cblocks.length; j++) {
+                if (cblocks[j].checked) {
+                    if (doespathmatch(path[i], cblocks[j].getAttribute('name'))) {
+                        paffect = false;
+                    }
+                }
+            }
+            if (paffect) {
+                path[i].style.stroke = ColorLuminance(c1, Math.random());
+            }
         }
     }
     for (var i = 0; i < svg.length; i++) {
-        svg[i].style.fill = c1;
+        var paffect = true;
+        for (var j = 0; j < cblocks.length; j++) {
+            if (cblocks[j].checked) {
+                if (doespathmatch(svg[i], cblocks[j].getAttribute('name'))) {
+                    paffect = false;
+                }
+            }
+        }
+        if (paffect) {
+            svg[i].style.fill = c1;
+        }
     }
     for (var i = 0; i < selected.length; i++) {
         selected[i].style.backgroundColor = c1;

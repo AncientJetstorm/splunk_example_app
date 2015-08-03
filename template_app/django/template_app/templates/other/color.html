@@ -47,6 +47,7 @@ styles in <div> tags, similar to Bootstrap's grid system.
                 <option value="flowsketch">Flow Sketch</option>
                 <option value="flowcircle">Flow Circle</option>
                 <option value="flowrectangle">Flow Rectangle</option>
+                <option value="star">Star</option>
                 <option value="flair">Flair</option>
                 <option value="pen">Pen</option>
                 <option value="fade">Fade</option>
@@ -57,7 +58,7 @@ styles in <div> tags, similar to Bootstrap's grid system.
             </select>
             <input type="color" id="canvascolor" style="visibility: hidden; margin-left: 10px; width: 100px;" onchange="overlaycolorchange()">
             <input type="color" id="canvascolor2" style="visibility: hidden; position: fixed; margin-left: 10px; width: 100px">
-            <input type="submit" id="clearcanvas" value="Clear Canvas" onclick="clearcanvas(this)" style="visibility: hidden; margin-left: 10px; margin-bottom: 7px;">
+            <input type="submit" id="clearcanvas" value="Clear Canvas" onclick="clearcanvas()" style="visibility: hidden; margin-left: 10px; margin-bottom: 7px;">
             <input type="text" id="canvasline" value="1" style="margin-left: 10px; width: 100px;">
             <input type="submit" value="Switch To Textbox" id="switchbutton" onclick="switchVisibility()" style="margin-left: 10px; margin-bottom: 7px;">
             <select id="overlaysizechange" style="margin-left: 10px; width: 100px;" onchange="overlaysize()">
@@ -162,6 +163,13 @@ styles in <div> tags, similar to Bootstrap's grid system.
                                 </div>
                             </li>
                         </div>
+                        <select id="tableselect">
+                            <option value=".table-chrome>thead>tr>th">Header</option>
+                            <option value=".table-striped>tbody>tr:nth-child(even)>td">Even rows</option>
+                            <option value=".table-striped>tbody>tr:nth-child(odd)>td">Odd rows</option>
+                        </select>
+                        <input type="color" id="tablecolor" onchange="tablecolor()">
+                        <input type="checkbox" id="tablelock" style="margin-bottom: 7px"> Lock colors
                     </td>
                 </tr>
                 <tr>

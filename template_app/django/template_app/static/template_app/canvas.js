@@ -105,6 +105,7 @@ el.onmousedown = function(e) {
       clientX = getMousePos(null, e).x;
       clientY = getMousePos(null, e).y;
       ctx.fillStyle = document.getElementById('canvascolor').value;
+      ctx.drawstyle = document.getElementById('canvascolor').value;
       timeout = setTimeout(function draw() {
         if (document.getElementById('drawstyle').value == 'sprayrect') {
             for (var i = density; i--; ) {
@@ -139,7 +140,7 @@ el.onmousemove = function(e) {
   ctx.lineWidth = document.getElementById('canvasline').value;
   var line = document.getElementById('canvasline').value;
   ctx.strokeStyle = document.getElementById('canvascolor').value;
-  ctx.fillStyle = document.getElementById('canvascolor2').value;
+  //ctx.fillStyle = document.getElementById('canvascolor2').value;
   origincolor = hexToRgb(document.getElementById('canvascolor').value);
   origincolor2 = hexToRgb(document.getElementById('canvascolor2').value);
   ctx.shadowOffsetX = 0;
@@ -438,6 +439,17 @@ el.onmousemove = function(e) {
         ctx.stroke();
     //}
 
+  } else if (document.getElementById('drawstyle').value == 'star') {
+
+    ctx.strokeStyle = generateColor();
+    ctx.lineWidth = (Math.random() * 50) + 1;
+    ctx.fillStyle = generateColor();
+    ctx.globalAlpha = Math.random();
+    ctx.lineJoin = "miter";
+    var tradius = (Math.random() * 100) + 10;
+
+    star(getMousePos(null, e).x, getMousePos(null, e).y, tradius, 5, 0.5);
+
   } else if (document.getElementById('drawstyle').value == 'pen') {
 
     ctx.beginPath();
@@ -627,7 +639,7 @@ function overlaycolorchange() {
 
 }
 
-function clearcanvas(obj) {
+function clearcanvas() {
 
     var canvas = document.getElementById('mycanvas');
 
@@ -640,3 +652,118 @@ function clearcanvas(obj) {
     }
 
 }
+
+function star(x, y, r, p, m) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.translate(x, y);
+    ctx.moveTo(0,0-r);
+    for (var i = 0; i < p; i++) {
+        ctx.rotate(Math.PI / p);
+        ctx.lineTo(0, 0 - (r*m));
+        ctx.rotate(Math.PI / p);
+        ctx.lineTo(0, 0 - r);
+    }
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+}
+
+function flag() {
+
+    ctx.lineWidth = 1;
+    ctx.fillStyle = "#456ffb";
+
+    var eh = el.offsetHeight - 95;
+    var ew = el.offsetWidth;
+    var ehd = eh / 13;
+
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.lineTo((ew / 4), 0);
+    ctx.lineTo((ew / 4), ehd * 6);
+    ctx.lineTo(0, ehd * 6);
+    ctx.fill();
+    ctx.closePath();
+
+    ctx.fillStyle = "white";
+    for (var i = 0; i < 50; i++) {
+        if (i < 10) {
+            star(30 + (i * 37), 30, 15, 5, 0.5);
+        } else if (i < 20) {
+            star(45 + ((i - 10) * 37), 62, 15, 5, 0.5);
+        } else if (i < 30) {
+            star(30 + ((i - 20) * 37), 94, 15, 5, 0.5);
+        } else if (i < 40) {
+            star(45 + ((i - 30) * 37), 126, 15, 5, 0.5);
+        } else if (i < 50) {
+            star(30 + ((i - 40) * 37), 158, 15, 5, 0.5);
+        }
+    }
+
+    for (var i = 0; i < 13; i++) {
+        if (i % 2 == 0) {
+            ctx.fillStyle = "red";
+        } else {
+            ctx.fillStyle = "white";
+        }
+        if (i < 6) {
+            ctx.beginPath();
+            ctx.moveTo((ew / 4), i * ehd);
+            ctx.lineTo(ew, i * ehd);
+            ctx.lineTo(ew, ehd + (i * ehd));
+            ctx.lineTo((ew / 4), ehd + (i * ehd));
+            ctx.fill();
+            ctx.closePath();
+        } else {
+            ctx.beginPath();
+            ctx.moveTo(0, i * ehd);
+            ctx.lineTo(ew, i * ehd);
+            ctx.lineTo(ew, ehd + (i * ehd));
+            ctx.lineTo(0, ehd + (i * ehd));
+            ctx.fill();
+            ctx.closePath();
+        }
+    }
+
+}
+
+function space() {
+
+    ctx.fillStyle = "#061520";
+    ctx.fillRect(0, 0, el.offsetWidth, el.offsetHeight);
+    ctx.lineWidth = 1;
+
+    var stardense = Math.floor(Math.random() * 200) + 20;
+    ctx.fillStyle = "white";
+    ctx.strokeStyle = "#061520";
+    ctx.shadowBlur = 0;
+    ctx.shadowColor = "white";
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
+
+    for (var i = 0; i < stardense; i++) {
+        star(Math.floor(Math.random() * 1600) + 20, Math.floor(Math.random() * 400) + 20, Math.floor(Math.random() * 2) + 3, 5, 0.5);
+        if (i == stardense - 1) {
+            star(1600, Math.floor(Math.random() * 400) + 20, Math.floor(Math.random() * 2) + 3, 5, 0.5);
+        }
+    }
+
+
+    var innersun = ctx.createRadialGradient(0, 0, 40, 0, 0, 100);
+    innersun.addColorStop(0, "#C5B700");
+    innersun.addColorStop(1, "#F4E400");
+    ctx.shadowColor = "yellow";
+    ctx.shadowBlur = 100;
+    ctx.shadowOffsetX = 10;
+    ctx.shadowOffsetY = 10;
+    ctx.arc(10, 10, 100, 0, 2 * Math.PI);
+    ctx.fillStyle = innersun;
+    ctx.fill();
+
+}
+
+
+
+
+

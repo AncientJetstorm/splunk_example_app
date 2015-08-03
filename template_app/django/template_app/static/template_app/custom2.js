@@ -1,4 +1,5 @@
 var urlprefix = document.URL.substr(0, document.URL.search("/dj"));
+var searchName = "";
 
 require.config({
     baseUrl: urlprefix + "/static/js",
@@ -314,7 +315,7 @@ require([
             "id": "element3",
             "charting.chart": "column",
             "resizable": false,
-            "charting.seriesColors": "[0xBB3B23]",
+            "charting.seriesColors": "[0xffffff]",
             "charting.legend.placement": "right",
             "charting.drilldown": "all",
             "charting.axisTitleX.text": "Device",
