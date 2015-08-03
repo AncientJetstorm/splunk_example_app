@@ -24,7 +24,7 @@ function timedtheme() {
 
 function temperet2() {
 
-    blueprintTheme(document.getElementById('colorlabel1').innerHTML, document.getElementById('colorlabel2').innerHTML);
+    chartupdate(document.getElementById('colorlabel1').innerHTML, document.getElementById('colorlabel2').innerHTML);
     window.clearInterval(colored);
 
     var child1 = document.getElementsByClassName("search-button btn-pill");

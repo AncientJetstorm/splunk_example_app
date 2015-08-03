@@ -596,6 +596,41 @@ function doespathmatch(path, headname) {
 
 }
 
+function chartupdate(c1, c2) {
+
+    var chartbg = document.querySelectorAll('.highcharts-background');
+    var path = document.querySelectorAll('path');
+    var rect = document.querySelectorAll('rect');
+    var svg = document.querySelectorAll('text');
+
+
+    for (var i = 0; i < rect.length; i++) {
+        rect[i].style.fill = c1;
+    }
+
+    for (var i = 0; i < chartbg.length; i++) {
+        chartbg[i].style.fill = c2;
+    }
+
+    for (var i = 0; i < path.length; i++) {
+        if (path[i].getAttribute('fill') != null && path[i].getAttribute('fill') != "none") {
+            var posneg = Math.random();
+            if (posneg > 0.5) {
+                path[i].style.fill = ColorLuminance(c1, Math.random());
+            } else {
+                path[i].style.fill = ColorLuminance(c1, -Math.random());
+            }
+        } else if (path[i].getAttribute('fill') == "none") {
+            path[i].style.stroke = ColorLuminance(c1, Math.random());
+        }
+    }
+
+    for (var i = 0; i < svg.length; i++) {
+        svg[i].style.fill = c1;
+    }
+
+}
+
 function blueprintTheme(c1, c2) {
 
     var selected = document.querySelectorAll('.splunk-paginator a.selected, .splunk-paginator a:hover');

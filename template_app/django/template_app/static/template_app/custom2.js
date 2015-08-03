@@ -1,5 +1,4 @@
 var urlprefix = document.URL.substr(0, document.URL.search("/dj"));
-var searchName = "";
 
 require.config({
     baseUrl: urlprefix + "/static/js",
